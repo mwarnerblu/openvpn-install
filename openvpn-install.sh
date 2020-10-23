@@ -324,7 +324,7 @@ function installQuestions() {
 	echo "   8) OpenDNS (Anycast: worldwide)"
 	echo "   9) Google (Anycast: worldwide)"
 	echo "   10) Custom"
-	until [[ $DNS =~ ^[0-9]+$ ]] && [ "$DNS" -ge 1 ] && [ "$DNS" -le 13 ]; do
+	until [[ $DNS =~ ^[0-9]+$ ]] && [ "$DNS" -ge 1 ] && [ "$DNS" -le 10 ]; do
 		read -rp "DNS [1-12]: " -e -i 9 DNS
 		if [[ $DNS == 2 ]] && [[ -e /etc/unbound/unbound.conf ]]; then
 			echo ""
