@@ -19,12 +19,14 @@ chmod +x openvpn-install.sh
 
 Enable TUN Module:
 
-```sudo modprobe tun```
+```sh
+sudo modprobe tun
+```
 
 Then run it:
 
 ```sh
-./openvpn-install.sh
+sudo ./openvpn-install.sh
 ```
 
 You need to run the script as root and have the TUN module enabled.
