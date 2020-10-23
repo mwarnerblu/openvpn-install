@@ -2,7 +2,18 @@
 # shellcheck disable=SC1091,SC2164,SC2034,SC1072,SC1073,SC1009
 
 # Secure OpenVPN server installer for Debian, Ubuntu, CentOS, Amazon Linux 2, Fedora and Arch Linux
-# https://github.com/angristan/openvpn-install
+# Forked from https://github.com/angristan/openvpn-install 
+# ---
+# Can used for inside-out tunneling of traffic from Blumira Sensors out to the internet
+# 
+# Sensor 1
+#		   \
+#			 Internal VPN (DMZ) -> Blumira Log Shipping/Telemetry (*.googleapis.com)
+#		   /
+# Sensor 2
+#
+# This server should be monitored heavily for resource consumption
+# and limitations to avoid lost data.
 
 function isRoot() {
 	if [ "$EUID" -ne 0 ]; then
@@ -209,14 +220,12 @@ access-control: fd42:42:42:42::/112 allow' >>/etc/unbound/openvpn.conf
 
 function installQuestions() {
 	echo "Welcome to the OpenVPN installer!"
-	echo "The git repository is available at: https://github.com/angristan/openvpn-install"
+	echo "The git repository is available at: https://github.com/mwarnerblu/openvpn-install"
 	echo ""
-
 	echo "I need to ask you a few questions before starting the setup."
-	echo "You can leave the default options and just press enter if you are ok with them."
+	echo "The defaults should be acceptable in most cases, but, can be changed."
 	echo ""
 	echo "I need to know the IPv4 address of the network interface you want OpenVPN listening to."
-	echo "Unless your server is behind NAT, it should be your public IPv4 address."
 
 	# Detect public IPv4 address and pre-fill for the user
 	IP=$(ip -4 addr | sed -ne 's|^.* inet \([^/]*\)/.* scope global.*$|\1|p' | head -1)
@@ -288,6 +297,8 @@ function installQuestions() {
 	echo ""
 	echo "What protocol do you want OpenVPN to use?"
 	echo "UDP is faster. Unless it is not available, you shouldn't use TCP."
+	echo "Blumira Note: While UDP works well in testing, TCP may be required once"
+	echo "ingesting data from a large number of Sensors to ensure reliable connections."
 	echo "   1) UDP"
 	echo "   2) TCP"
 	until [[ $PROTOCOL_CHOICE =~ ^[1-2]$ ]]; do
@@ -312,10 +323,7 @@ function installQuestions() {
 	echo "   7) DNS.WATCH (Germany)"
 	echo "   8) OpenDNS (Anycast: worldwide)"
 	echo "   9) Google (Anycast: worldwide)"
-	echo "   10) Yandex Basic (Russia)"
-	echo "   11) AdGuard DNS (Anycast: worldwide)"
-	echo "   12) NextDNS (Anycast: worldwide)"
-	echo "   13) Custom"
+	echo "   10) Custom"
 	until [[ $DNS =~ ^[0-9]+$ ]] && [ "$DNS" -ge 1 ] && [ "$DNS" -le 13 ]; do
 		read -rp "DNS [1-12]: " -e -i 11 DNS
 		if [[ $DNS == 2 ]] && [[ -e /etc/unbound/unbound.conf ]]; then
@@ -822,19 +830,7 @@ ifconfig-pool-persist ipp.txt" >>/etc/openvpn/server.conf
 		echo 'push "dhcp-option DNS 8.8.8.8"' >>/etc/openvpn/server.conf
 		echo 'push "dhcp-option DNS 8.8.4.4"' >>/etc/openvpn/server.conf
 		;;
-	10) # Yandex Basic
-		echo 'push "dhcp-option DNS 77.88.8.8"' >>/etc/openvpn/server.conf
-		echo 'push "dhcp-option DNS 77.88.8.1"' >>/etc/openvpn/server.conf
-		;;
-	11) # AdGuard DNS
-		echo 'push "dhcp-option DNS 176.103.130.130"' >>/etc/openvpn/server.conf
-		echo 'push "dhcp-option DNS 176.103.130.131"' >>/etc/openvpn/server.conf
-		;;
-	12) # NextDNS
-		echo 'push "dhcp-option DNS 45.90.28.167"' >>/etc/openvpn/server.conf
-		echo 'push "dhcp-option DNS 45.90.30.167"' >>/etc/openvpn/server.conf
-		;;
-	13) # Custom DNS
+	10) # Custom DNS
 		echo "push \"dhcp-option DNS $DNS1\"" >>/etc/openvpn/server.conf
 		if [[ $DNS2 != "" ]]; then
 			echo "push \"dhcp-option DNS $DNS2\"" >>/etc/openvpn/server.conf
@@ -1284,7 +1280,7 @@ function removeOpenVPN() {
 
 function manageMenu() {
 	echo "Welcome to OpenVPN-install!"
-	echo "The git repository is available at: https://github.com/angristan/openvpn-install"
+	echo "The git repository is available at: https://github.com/mwarnerblu/openvpn-install"
 	echo ""
 	echo "It looks like OpenVPN is already installed."
 	echo ""
