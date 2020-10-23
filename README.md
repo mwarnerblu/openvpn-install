@@ -1,28 +1,32 @@
 # openvpn-install
 
-![Test](https://github.com/angristan/openvpn-install/workflows/Test/badge.svg)
-![Lint](https://github.com/angristan/openvpn-install/workflows/Lint/badge.svg)
-![visitors](https://visitor-badge.glitch.me/badge?page_id=angristan.openvpn-install)
-
 OpenVPN installer for Debian, Ubuntu, Fedora, CentOS and Arch Linux.
 
 This script will let you setup your own secure VPN server in just a few seconds.
 
-You can also check out [wireguard-install](https://github.com/angristan/wireguard-install), a simple installer for a simpler, safer, faster and more modern VPN protocol.
+## Original Fork Details
+![Test](https://github.com/angristan/openvpn-install/workflows/Test/badge.svg)
+![Lint](https://github.com/angristan/openvpn-install/workflows/Lint/badge.svg)
 
 ## Usage
 
 First, get the script and make it executable:
 
 ```bash
-curl -O https://raw.githubusercontent.com/angristan/openvpn-install/master/openvpn-install.sh
+curl -O https://raw.githubusercontent.com/mwarnerblu/openvpn-install/master/openvpn-install.sh
 chmod +x openvpn-install.sh
+```
+
+Enable TUN Module:
+
+```sh
+sudo modprobe tun
 ```
 
 Then run it:
 
 ```sh
-./openvpn-install.sh
+sudo ./openvpn-install.sh
 ```
 
 You need to run the script as root and have the TUN module enabled.
@@ -35,11 +39,7 @@ When OpenVPN is installed, you can run the script again, and you will get the ch
 - Remove a client
 - Uninstall OpenVPN
 
-In your home directory, you will have `.ovpn` files. These are the client configuration files. Download them from your server and connect using your favorite OpenVPN client.
-
-If you have any question, head to the [FAQ](#faq) first. Please read everything before opening an issue.
-
-**PLEASE do not send me emails or private messages asking for help.** The only place to get help is the issues. Other people may be able to help and in the future, other users may also run into the same issue as you. My time is not available for free just for you, you're not special.
+In your home directory, you will have `.ovpn` files. These are the client configuration files. Download them from your server and connect using the OpenVPN client.
 
 ### Headless install
 
@@ -134,22 +134,9 @@ To be noted:
 
 ## Fork
 
-This script is based on the great work of [Nyr and its contributors](https://github.com/Nyr/openvpn-install).
+This script is based on the amazing work of [Angristan](https://github.com/angristan) who forked from the great work of [Nyr and its contributors](https://github.com/Nyr/openvpn-install).
 
 Since 2016, the two scripts have diverged and are not alike anymore, especially under the hood. The main goal of the script was enhanced security. But since then, the script has been completely rewritten and a lot a features have been added. The script is only compatible with recent distributions though, so if you need to use a very old server or client, I advise using Nyr's script.
-
-## FAQ
-
-More Q&A in [FAQ.md](FAQ.md).
-
-**Q:** Which provider do you recommend?
-
-**A:** I recommend these:
-
-- [Vultr](https://goo.gl/Xyd1Sc): Worldwide locations, IPv6 support, starting at \$3.50/month
-- [Hetzner](https://hetzner.cloud/?ref=ywtlvZsjgeDq): Germany, IPv6, 20 TB of traffic, starting at €3/month
-- [Digital Ocean](https://goo.gl/qXrNLK): Worldwide locations, IPv6 support, starting at \$5/month
-- [PulseHeberg](https://goo.gl/76yqW5): France, unlimited bandwidth, starting at €3/month
 
 ---
 
@@ -165,40 +152,9 @@ More Q&A in [FAQ.md](FAQ.md).
 
 ---
 
-**Q:** Am I safe from the NSA by using your script?
-
-**A:** Please review your threat models. Even if this script has security in mind and uses state-of-the-art encryption, you shouldn't be using a VPN if you want to hide from the NSA.
-
----
-
 **Q:** Is there an OpenVPN documentation?
 
 **A:** Yes, please head to the [OpenVPN Manual](https://community.openvpn.net/openvpn/wiki/Openvpn24ManPage), which references all the options.
-
----
-
-More Q&A in [FAQ.md](FAQ.md).
-
-## One-stop solutions for public cloud
-
-Solutions that provision a ready to use OpenVPN server based on this script in one go are available for:
-
-- AWS using Terraform at [`openvpn-terraform-install`](https://github.com/dumrauf/openvpn-terraform-install)
-
-## Contributing
-
-### Contributors hall-of-fame
-
-Thanks ❤️
-
-[![](https://sourcerer.io/fame/angristan/angristan/openvpn-install/images/0)](https://github.com/angristan/openvpn-install/graphs/contributors)
-[![](https://sourcerer.io/fame/angristan/angristan/openvpn-install/images/1)](https://github.com/angristan/openvpn-install/graphs/contributors)
-[![](https://sourcerer.io/fame/angristan/angristan/openvpn-install/images/2)](https://github.com/angristan/openvpn-install/graphs/contributors)
-[![](https://sourcerer.io/fame/angristan/angristan/openvpn-install/images/3)](https://github.com/angristan/openvpn-install/graphs/contributors)
-[![](https://sourcerer.io/fame/angristan/angristan/openvpn-install/images/4)](https://github.com/angristan/openvpn-install/graphs/contributors)
-[![](https://sourcerer.io/fame/angristan/angristan/openvpn-install/images/5)](https://github.com/angristan/openvpn-install/graphs/contributors)
-[![](https://sourcerer.io/fame/angristan/angristan/openvpn-install/images/6)](https://github.com/angristan/openvpn-install/graphs/contributors)
-[![](https://sourcerer.io/fame/angristan/angristan/openvpn-install/images/7)](https://github.com/angristan/openvpn-install/graphs/contributors)
 
 ### Code formatting
 
@@ -345,11 +301,13 @@ So both provide an additional layer of security and mitigate DoS attacks. They a
 
 The script supports both and uses `tls-crypt` by default.
 
-## Say thanks
+## Say thanks to the original author!
 
 You can [say thanks](https://saythanks.io/to/angristan%40pm.me) if you want!
 
 ## Credits & Licence
+
+Thanks to [angristan](https://github.com/angristan) for a great OpenVPN creation script!
 
 Many thanks to the [contributors](https://github.com/Angristan/OpenVPN-install/graphs/contributors) and Nyr's original work.
 
